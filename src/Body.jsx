@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 function Body() {
+  const [tanggal, setTanggal] = useState('');
   const [uang, setUang] = useState('');
   const [jumlahBerat, setJumlahBerat] = useState('');
   const [hargaKg, setHargaKg] = useState('');
@@ -19,7 +20,13 @@ function Body() {
     e.preventDefault();
     const totalHarga = uang - jumlahBerat * hargaKg;
     if (!isNaN(totalHarga)) {
-      const record = `Uang: ${uang}, Jumlah Berat: ${jumlahBerat}, Harga per KG: ${hargaKg}, Sisa uangnya: ${totalHarga}`;
+      const record = {
+        tanggal: tanggal || new Date().toISOString().split('T')[0], // gunakan tanggal hari ini jika kosong
+        uang,
+        jumlahBerat,
+        hargaKg,
+        totalHarga,
+      };
       setHistoryData([...historyData, record]);
     }
   };
@@ -33,7 +40,7 @@ function Body() {
   };
 
   const hapusSatu = (index) => {
-    if (window.confirm(`Hapus riwayat "${historyData[index]}"?`)) {
+    if (window.confirm(`Hapus riwayat tanggal ${historyData[index].tanggal}?`)) {
       const newHistory = historyData.filter((_, i) => i !== index);
       setHistoryData(newHistory);
     }
@@ -74,7 +81,13 @@ function Body() {
       <p>Tolong input uang dan sebagainya</p>
       <form onSubmit={handleHitung}>
         <label htmlFor="tanggal">Tanggal&nbsp;:</label>
-        <input type="date" id="tanggal" name="tanggal" />
+        <input
+          type="date"
+          id="tanggal"
+          name="tanggal"
+          value={tanggal}
+          onChange={(e) => setTanggal(e.target.value)}
+        />
         <br />
 
         <label htmlFor="uang">Uang&nbsp;:</label>
@@ -116,9 +129,11 @@ function Body() {
       <br />
       <p>History</p>
       <ul id="historyList">
-        {historyData.map((text, index) => (
+        {historyData.map((item, index) => (
           <li key={index}>
-            {index + 1}. {text}{' '}
+            <strong>{index + 1}. [{item.tanggal}]</strong>{' '}
+            Uang: {item.uang}, Jumlah Berat: {item.jumlahBerat}, Harga per KG: {item.hargaKg},{' '}
+            <strong>Sisa uang: {item.totalHarga}</strong>{' '}
             <button onClick={() => hapusSatu(index)}>Hapus</button>
           </li>
         ))}
