@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import './Body.css'; // <--- Tambahkan ini untuk memuat CSS
 
 function Body() {
   const [tanggal, setTanggal] = useState('');
@@ -6,12 +7,10 @@ function Body() {
   const [jumlahBerat, setJumlahBerat] = useState('');
   const [hargaKg, setHargaKg] = useState('');
 
-  // Ambil data dari localStorage SEBELUM render pertama
   const [historyData, setHistoryData] = useState(() => {
     return JSON.parse(localStorage.getItem('inputHistory')) || [];
   });
 
-  // Update localStorage setiap kali history berubah
   useEffect(() => {
     localStorage.setItem('inputHistory', JSON.stringify(historyData));
   }, [historyData]);
@@ -21,7 +20,7 @@ function Body() {
     const totalHarga = uang - jumlahBerat * hargaKg;
     if (!isNaN(totalHarga)) {
       const record = {
-        tanggal: tanggal || new Date().toISOString().split('T')[0], // gunakan tanggal hari ini jika kosong
+        tanggal: tanggal || new Date().toISOString().split('T')[0],
         uang,
         jumlahBerat,
         hargaKg,
@@ -46,7 +45,6 @@ function Body() {
     }
   };
 
-  // 🧩 FITUR BACKUP ke file JSON
   const backupHistory = () => {
     const blob = new Blob([JSON.stringify(historyData, null, 2)], { type: 'application/json' });
     const link = document.createElement('a');
@@ -55,7 +53,6 @@ function Body() {
     link.click();
   };
 
-  // 🧩 FITUR RESTORE dari file JSON
   const restoreHistory = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -77,73 +74,82 @@ function Body() {
   };
 
   return (
-    <main>
-      <p>Tolong input uang dan sebagainya</p>
-      <form onSubmit={handleHitung}>
-        <label htmlFor="tanggal">Tanggal&nbsp;:</label>
-        <input
-          type="date"
-          id="tanggal"
-          name="tanggal"
-          value={tanggal}
-          onChange={(e) => setTanggal(e.target.value)}
-        />
-        <br />
+    <main className="container">
+      <h2>💰 Kalkulator & Riwayat Perhitungan</h2>
 
-        <label htmlFor="uang">Uang&nbsp;:</label>
-        <input
-          type="number"
-          id="uang"
-          name="uang"
-          value={uang}
-          onChange={(e) => setUang(e.target.value)}
-        />
-        <br />
+      <form className="form-card" onSubmit={handleHitung}>
+        <div className="form-group">
+          <label htmlFor="tanggal">Tanggal</label>
+          <input
+            type="date"
+            id="tanggal"
+            value={tanggal}
+            onChange={(e) => setTanggal(e.target.value)}
+          />
+        </div>
 
-        <label htmlFor="jumlah_berat">Jumlah Berat&nbsp;:</label>
-        <input
-          type="number"
-          id="jumlah_berat"
-          name="jumlah_berat"
-          value={jumlahBerat}
-          onChange={(e) => setJumlahBerat(e.target.value)}
-        />
-        <br />
+        <div className="form-group">
+          <label htmlFor="uang">Uang</label>
+          <input
+            type="number"
+            id="uang"
+            value={uang}
+            onChange={(e) => setUang(e.target.value)}
+            placeholder="Masukkan uang"
+          />
+        </div>
 
-        <label htmlFor="harga_kg">Harga per KG&nbsp;:</label>
-        <input
-          type="number"
-          id="harga_kg"
-          name="harga_kg"
-          value={hargaKg}
-          onChange={(e) => setHargaKg(e.target.value)}
-        />
-        <br />
+        <div className="form-group">
+          <label htmlFor="jumlah_berat">Jumlah Berat</label>
+          <input
+            type="number"
+            id="jumlah_berat"
+            value={jumlahBerat}
+            onChange={(e) => setJumlahBerat(e.target.value)}
+            placeholder="Masukkan berat (kg)"
+          />
+        </div>
 
-        <button id="hitung">Hitung</button>
-        <button id="hapus_riwayat" onClick={hapusSemua}>
-          Hapus semua riwayat
-        </button>
+        <div className="form-group">
+          <label htmlFor="harga_kg">Harga per KG</label>
+          <input
+            type="number"
+            id="harga_kg"
+            value={hargaKg}
+            onChange={(e) => setHargaKg(e.target.value)}
+            placeholder="Masukkan harga/kg"
+          />
+        </div>
+
+        <div className="btn-group">
+          <button id="hitung" className="btn hitung">Hitung</button>
+          <button id="hapus_riwayat" className="btn hapus" onClick={hapusSemua}>
+            Hapus Semua
+          </button>
+        </div>
       </form>
 
-      <br />
-      <p>History</p>
-      <ul id="historyList">
-        {historyData.map((item, index) => (
-          <li key={index}>
-            <strong>{index + 1}. [{item.tanggal}]</strong>{' '}
-            Uang: {item.uang}, Jumlah Berat: {item.jumlahBerat}, Harga per KG: {item.hargaKg},{' '}
-            <strong>Sisa uang: {item.totalHarga}</strong>{' '}
-            <button onClick={() => hapusSatu(index)}>Hapus</button>
-          </li>
-        ))}
-      </ul>
+      <section className="history-section">
+        <h3>🧾 History</h3>
+        <ul id="historyList">
+          {historyData.map((item, index) => (
+            <li key={index} className="history-item">
+              <p><strong>{index + 1}. [{item.tanggal}]</strong></p>
+              <p>Uang: {item.uang} | Berat: {item.jumlahBerat} kg | Harga/kg: {item.hargaKg}</p>
+              <p><strong>Sisa Uang: {item.totalHarga}</strong></p>
+              <button className="btn kecil" onClick={() => hapusSatu(index)}>Hapus</button>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-      <br />
-      <h3>Backup & Restore</h3>
-      <button onClick={backupHistory}>💾 Backup ke File</button>
-      <br />
-      <input type="file" accept="application/json" onChange={restoreHistory} />
+      <section className="backup-section">
+        <h3>📦 Backup & Restore</h3>
+        <div className="btn-group">
+          <button onClick={backupHistory} className="btn backup">💾 Backup</button>
+          <input type="file" accept="application/json" onChange={restoreHistory} className="file-input" />
+        </div>
+      </section>
     </main>
   );
 }

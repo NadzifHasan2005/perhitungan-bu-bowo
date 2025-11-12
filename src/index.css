@@ -1,35 +1,121 @@
-*{
-  margin: 20px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+/* Gaya umum */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f5f6fa;
+  margin: 0;
+  padding: 0;
+  color: #2f3640;
 }
 
-header  {
-  display: flex;
-  justify-content: space-between;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+.container {
+  max-width: 600px;
+  margin: 1.5rem auto;
+  padding: 1rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
-header nav ul{
-  display: flex;
-  padding: 0;
-  margin: 12px;
-  list-style: none;
-  font-size: 1.5em;
-  transition: 0.5s;
+
+h2, h3 {
+  text-align: center;
+  color: #273c75;
 }
-@media screen and (max-width: 360px) {
-  header nav ul{
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.form-group input {
+  padding: 0.6rem;
+  border: 1px solid #dcdde1;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn.hitung {
+  background: #44bd32;
+  color: white;
+}
+.btn.hitung:hover { background: #4cd137; }
+
+.btn.hapus {
+  background: #e84118;
+  color: white;
+}
+.btn.hapus:hover { background: #c23616; }
+
+.btn.backup {
+  background: #487eb0;
+  color: white;
+}
+.btn.backup:hover { background: #40739e; }
+
+.btn.kecil {
+  background: #718093;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.history-section {
+  margin-top: 1rem;
+}
+
+.history-item {
+  background: #f1f2f6;
+  padding: 0.8rem;
+  margin-bottom: 0.6rem;
+  border-radius: 0.5rem;
+}
+
+.file-input {
+  margin-top: 0.5rem;
+}
+
+/* Responsif untuk Mobile */
+@media (max-width: 480px) {
+  .container {
+    margin: 0.5rem;
+    padding: 0.8rem;
+  }
+
+  .btn-group {
     flex-direction: column;
   }
-}
-header nav ul :hover{
-  color: blue;
-  transition: 0.5s;
-  font-weight: bold;
-}
 
+  .btn {
+    width: 100%;
+  }
 
-
-
-body{
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  .history-item {
+    font-size: 0.9rem;
+  }
 }
